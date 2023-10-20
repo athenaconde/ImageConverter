@@ -1,0 +1,166 @@
+﻿<Window x:Class="ImageConverter.Main"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:c="clr-namespace:ImageConverter.Converter"
+        xmlns:v="clr-namespace:ImageConverter.View"
+        xmlns:vm="clr-namespace:ImageConverter.ViewModel"
+        WindowStartupLocation="CenterScreen" 
+        WindowStyle="ThreeDBorderWindow"
+        AllowsTransparency="False"
+        Background="#444"
+        Title="Image Reducer and Converter" Height="350" Width="525"
+        FontFamily="Segoe UI" Foreground="White">
+    <!--WindowState="Maximized"-->
+  
+    <Window.Resources>
+        <ObjectDataProvider x:Key="imageViewModelProvider" ObjectType="{x:Type vm:ImageViewModel}"/>
+        <c:BoolToVisibilityConverter x:Key="boolToVisibilityConverter"/>
+        <DataTemplate x:Key="imageFormatItemView">
+            <v:ImageFormat />
+        </DataTemplate>
+    </Window.Resources>
+    <Grid DataContext="{Binding Source={StaticResource imageViewModelProvider}}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <!--file of folder selector-->
+        <Border Grid.Row="0" BorderThickness="10">
+            <Grid HorizontalAlignment="Left">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="3*" MinWidth="150"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition MinWidth="10"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Set source file or folder: " Grid.Column="0"/>
+                <TextBlock Text="Set destination folder: " Grid.Column="0" Grid.Row="1"/>
+                <TextBox Text="{Binding SourcePath}" Grid.Column="1"/>
+                <TextBox Text="{Binding TargetPath}" Grid.Column="1" Grid.Row="1"/>
+                <Button Name="btnBrowseSource" Grid.Column="2"  Command="{Binding BrowseSourceFileCommand}" Content="Browse"/>
+                <Button Name="btnSelectTarget" Grid.Column="2" Grid.Row="1"  Command="{Binding BrowseTargetFileCommand}" Content="Browse"/>
+                <CheckBox Grid.Column="4" IsChecked="{Binding IsSingleFileToConvert}"/>
+                <CheckBox Grid.Column="4" Grid.Row="1" IsChecked="{Binding IsFilesInFolderToConvert}"/>
+                <TextBlock Grid.Column="5" Text="Single File"/>
+                <TextBlock Grid.Column="5" Grid.Row="1" Text="All files in the folder"/>
+                
+            </Grid>
+        </Border>
+        <!--Reduce or convert selector-->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <!--reducer-->
+                <ColumnDefinition Width="auto"/>
+                <!--converter-->
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="Select reduce or convert:"/>
+            <TextBlock Text="Set image size" Grid.Column="1" Visibility="{Binding ReduceImage, Converter={StaticResource boolToVisibilityConverter}}"/>
+            <TextBlock Text="Select format" Grid.Column="2" Visibility="{Binding ConvertFormat, Converter={StaticResource boolToVisibilityConverter}}"/>
+            <Border Grid.Column="0" Grid.Row="1" BorderThickness="10">
+                <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <CheckBox Grid.Column="0" IsChecked="{Binding ReduceImage}"/>
+                    <TextBlock Grid.Column="1" Text="Reduce image size"/>
+                    <CheckBox Grid.Row="1" Grid.Column="0" IsChecked="{Binding ConvertFormat}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1"  Text="Convert image format"/>
+                </Grid>
+            </Border>
+            <!--reducer-->
+            <Border Grid.Column="1" Grid.Row="1" BorderThickness="10"
+                    Visibility="{Binding ReduceImage, Converter={StaticResource boolToVisibilityConverter}}">
+                 <!---->
+                <Grid VerticalAlignment="Top">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                        <!--ReduceSelector-->
+                    <Grid Margin="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <CheckBox Grid.Column="0" IsChecked="{Binding ScaleByPercent}"/>
+                        <TextBlock Grid.Column="1" Text="Scale by percent"/>
+                        <CheckBox Grid.Row="1" Grid.Column="0" IsChecked="{Binding ScaleBySize}"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1"  Text="Scale by size"/>
+                    </Grid>
+                        <!--ReduceByPercent-->
+                    <Grid Grid.Row="1" Margin="5" Visibility="{Binding ScaleByPercent, Converter={StaticResource boolToVisibilityConverter}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Set reduce percent:"/>
+                        <TextBox Grid.Column="1" Text="{Binding ReducePercent}"/>
+                    </Grid>
+                    <!--ReduceByScale-->
+                    <Grid Grid.Row="2" Margin="5" Visibility="{Binding ScaleBySize, Converter={StaticResource boolToVisibilityConverter}}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Set Height: "/>
+                        <TextBlock  Grid.Column="0" Grid.Row="1" Text="Set Width: "/>
+                        <TextBox Grid.Column="1" Text="{Binding ReduceHeightPixel}"/>
+                        <TextBox Grid.Row="1" Grid.Column="1"  Text="{Binding ReduceWidthPixel}"/>
+                        <TextBlock  Grid.Column="2" Grid.Row="0" Text="px"/>
+                        <TextBlock  Grid.Column="2" Grid.Row="1" Text="px"/>
+                    </Grid>
+                </Grid>
+       
+            </Border>
+            <!--converter-->
+            <Border Grid.Column="2" Grid.Row="1" BorderThickness="10"
+                    Visibility="{Binding ConvertFormat, Converter={StaticResource boolToVisibilityConverter}}">
+                <ItemsControl 
+                    Margin="1"
+                    ItemsSource="{Binding ImageFormats}"
+                    ItemTemplate="{StaticResource imageFormatItemView}">                    
+                </ItemsControl>
+            </Border>
+        </Grid>
+        <!--process buttons-->
+        <Grid Grid.Row="2" HorizontalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="30"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" MinWidth="80" Content="Convert" Command="{Binding ConvertCommand}"/>
+            <Button Grid.Column="2" MinWidth="80"  Content="{Binding CancelLabel}" Command="{Binding CancelCommand}"/>
+        </Grid>
+        <ProgressBar Grid.Row="3" MinHeight="20" Visibility="{Binding IsBusy, Converter={StaticResource boolToVisibilityConverter}}" Value="{Binding ConvertPercentCompletion}"/>
+    </Grid>
+</Window>

@@ -1,0 +1,18 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ImageConverter.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="imageFormats" Type="System.String" Scope="User">
+      <Value Profile="(Default)">.ico,.jpg,.png,.gif</Value>
+    </Setting>
+    <Setting Name="lastSelectedFormat" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="reduceImageByPercent" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">50</Value>
+    </Setting>
+    <Setting Name="reduceImageByScale" Type="System.Drawing.Size" Scope="User">
+      <Value Profile="(Default)">12, 12</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
